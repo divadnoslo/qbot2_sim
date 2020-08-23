@@ -6,7 +6,7 @@
 P.Fs  = 100;                % Sample frequency (Hz)
 P.dt  = 1/P.Fs;             % Sample interval (sec)
 P.t_start = 0;              % Simulation start time (sec)
-P.t_end = 100;              % Simulation end time (sec)
+P.t_end = 10;              % Simulation end time (sec)
 
 P.fidelity = 1;             % Tan_Mech Attitude Update Parameter 
                             % (0 for low fidelity, 1 for high fidelity)

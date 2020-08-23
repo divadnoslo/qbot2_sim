@@ -10,7 +10,7 @@ vel = [v(:,1)'; v(:,2)'; v(:,3)'];
 
 % Extract Attitude
 for ii = 1 : length(pos)
-    [phi, theta, psi] = dcm2rpy(C(:,:,ii));
+    [psi, theta, phi] = dcm2ypr(C(:,:,ii));
     roll(ii) = phi * 180/pi;
     pitch(ii) = theta * 180/pi;
     yaw(ii) = psi * 180/pi;

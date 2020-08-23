@@ -21,6 +21,25 @@ if (flag_PVA_truth)
                                   out.V_truth.Data, ...
                                   out.A_truth.Data);
     
+    % 3D Motion Plot
+    figure
+    hold on
+    plot3(pos(1,:), pos(2,:), pos(3,:), 'r', 'LineWidth', 2)
+    plot3(pos(1,:), pos(2,:), zeros(1,length(pos(1,:))), 'k')
+    plot3(linspace(min(pos(1,:)), max(pos(1,:)), length(pos(1,:))), ...
+          zeros(1,length(pos(2,:))), ...
+          zeros(1,length(pos(3,:))), 'b', 'LineWidth', 0.5)
+    plot3(zeros(1,length(pos(1,:))), ...
+          linspace(min(pos(2,:)), max(pos(2,:)), length(pos(2,:))), ...
+          zeros(1,length(pos(3,:))), 'b', 'LineWidth', 0.5)
+    title('Figure Eight Motion')
+    xlabel('X (m)')
+    ylabel('Y (m)')
+    zlabel('Z (m)')
+    grid on
+    view(10, 47)
+    hold off
+                              
     % Position
     figure
     hold on
