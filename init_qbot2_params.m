@@ -37,20 +37,15 @@ P.f = 1 / 298.257223563;    % Flattening
 %% From ECEF to Tangential Frame (lat/long are from my house)
 
 P.L_b = 48.24816 * pi/180;          % rad
-P.lambda_b = -101.30724 * pi/180;   %rad
+P.lambda_b = -101.30724 * pi/180;   % rad
 P.h_b = 491;                        % m
 P.C_e__n = Lat_Lon_2C_e__n(P.L_b, P.lambda_b);
 P.C_n__t = eye(3); % Subject to change
 P.C_e__t = P.C_e__n * P.C_n__t;
-P.r_e__e_t = P.C_e__t * [P.R0; 0; 0];
+P.r_e__e_t = P.C_e__n * [P.R0; 0; 0];
 P.Ohm_t__i_e = P.C_e__t' * P.Ohm_i__i_e * P.C_e__t;
 
 %% Gravity Vector
-P.g_n__bD = gravity(P.L_b, P.h_b, P);
-P.g_t__b = [0; 0; P.g_n__bD];
-
-%% Simulation Initial Conditions
-
-P.r_t__t_b_init = [0; 0; 0];
-P.v_t__t_b_init = [0; 0; 0];
-P.C_t__b_init = eye(3);
+P.g_n__bD = [0; 0; gravity(P.L_b, P.h_b, P)];          % Compute the acceleration due to gravity
+P.g_e__b = P.C_e__n * P.g_n__bD;                       % Compute the gravity of the body in the {e} frame
+P.g_t__b = P.C_e__t' * P.g_e__b;                       % Compute the gravity of the body in the {t} frame

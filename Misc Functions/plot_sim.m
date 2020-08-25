@@ -5,8 +5,8 @@ function plot_sim(out, P)
 %% Plot Flags -- Turn on/off what plots you want to see!
 
 flag_PVA_truth = 1;
-flag_PVA_meas = 0;
-flag_IMU_truth = 1;
+flag_PVA_meas = 1;
+flag_IMU_truth = 0;
 flag_IMU_meas = 0;
 
 % Extract Time
