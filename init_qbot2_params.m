@@ -6,7 +6,7 @@
 P.Fs  = 100;                % Sample frequency (Hz)
 P.dt  = 1/P.Fs;             % Sample interval (sec)
 P.t_start = 0;              % Simulation start time (sec)
-P.t_end = 10;              % Simulation end time (sec)
+P.t_end = 100;              % Simulation end time (sec)
 
 P.fidelity = 1;             % Tan_Mech Attitude Update Parameter 
                             % (0 for low fidelity, 1 for high fidelity)
@@ -49,3 +49,27 @@ P.Ohm_t__i_e = P.C_e__t' * P.Ohm_i__i_e * P.C_e__t;
 P.g_n__bD = [0; 0; gravity(P.L_b, P.h_b, P)];          % Compute the acceleration due to gravity
 P.g_e__b = P.C_e__n * P.g_n__bD;                       % Compute the gravity of the body in the {e} frame
 P.g_t__b = P.C_e__t' * P.g_e__b;                       % Compute the gravity of the body in the {t} frame
+
+%% IMU Error Model Terms
+
+load("IMU_Cal_Data/IMU_Cal_Const_Error_Sources.mat")
+load("IMU_Cal_Data/IMU_Cal_Varying_Error_Sources.mat")
+
+% Gyro Terms
+P.gyro.BI.sigma_n = sigma_n_gyro;
+P.gyro.BI.correlation_time = 1; % unknown thus far
+P.gyro.b_g_FB = b_g_FB;
+P.gyro.sigma_ARW = gyro_std;
+P.gyro.M_g = M_g;
+P.gyro.G_g = (pi/180) * 0.05 * eye(3); % VN200 data sheet, Cross-Axis Sensitivity
+P.gyro.b_g_BS = zeros(3,1); % can set to random values at another time
+
+% Acceleration Terms
+P.accel.BI.sigma_n = sigma_n_accel;
+P.accel.BI.correlation_time = 1; % Unknown thus far
+P.accel.b_a_FB = b_a_FB;
+P.accel.sigma_VRW = accel_std;
+P.accel.M_a = M_a;
+P.accel.b_a_BS = zeros(3,1); % can be set to random later
+
+

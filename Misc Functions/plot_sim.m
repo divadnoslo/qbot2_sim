@@ -6,8 +6,8 @@ function plot_sim(out, P)
 
 flag_PVA_truth = 1;
 flag_PVA_meas = 1;
-flag_IMU_truth = 0;
-flag_IMU_meas = 0;
+flag_IMU_truth = 1;
+flag_IMU_meas = 1;
 
 % Extract Time
 t = out.tout;
