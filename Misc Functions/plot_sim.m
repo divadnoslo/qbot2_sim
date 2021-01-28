@@ -2,247 +2,49 @@ function plot_sim(out, P)
 
 % Provides plots of relevant states quickly and easily
 
+%**************************************************************************
 %% Plot Flags -- Turn on/off what plots you want to see!
 
-flag_PVA_truth = 1;
-flag_PVA_meas = 1;
-flag_IMU_truth = 1;
-flag_IMU_meas = 1;
+% Plotting PVA Ground Truth________________________________________________
+motion_3D_flag = false;
+p_truth_flag   = true;
+v_truth_flag   = true;
+a_truth_flag   = true;
 
-% Extract Time
-t = out.tout;
+% Plotting  PVA Measurements_______________________________________________
+p_meas_flag = true;
+v_meas_flag = true;
+a_meas_flag = true;
 
-%% PVA Truth --------------------------------------------------------------
+% Plotting IMU Truth & Meas________________________________________________
+accel_truth_flag = true;
+accel_meas_flag  = true;
+gyro_truth_flag  = true;
+gyro_meas_flag   = true;
+delta_accel_flag = false;
+delta_gyro_flag  = false;
 
-if (flag_PVA_truth)
-    
-    % Extract Variables
-    [pos, vel, rpy] = extract_PVA(out.P_truth.Data, ...
-                                  out.V_truth.Data, ...
-                                  out.A_truth.Data);
-    
-    % 3D Motion Plot
-    figure
-    hold on
-    plot3(pos(1,:), pos(2,:), pos(3,:), 'r', 'LineWidth', 2)
-    plot3(pos(1,:), pos(2,:), zeros(1,length(pos(1,:))), 'k')
-    plot3(linspace(min(pos(1,:)), max(pos(1,:)), length(pos(1,:))), ...
-          zeros(1,length(pos(2,:))), ...
-          zeros(1,length(pos(3,:))), 'b', 'LineWidth', 0.5)
-    plot3(zeros(1,length(pos(1,:))), ...
-          linspace(min(pos(2,:)), max(pos(2,:)), length(pos(2,:))), ...
-          zeros(1,length(pos(3,:))), 'b', 'LineWidth', 0.5)
-    title('Figure Eight Motion')
-    xlabel('X (m)')
-    ylabel('Y (m)')
-    zlabel('Z (m)')
-    grid on
-    view(10, 47)
-    hold off
-                              
-    % Position
-    figure
-    hold on
-    plot(t, pos(1,:), 'r', t, pos(2,:), 'g',t, pos(3,:), 'b')
-    title('TRUTH: Position (m)')
-    xlabel('Time (s)')
-    ylabel('r^t_tb (m)')
-    grid on
-    legend('r_x (m)', 'r_y (m)', 'r_z (m)', 'Location', 'Best')
-    hold off
-    
-    % Velocity
-    figure
-    hold on
-    plot(t, vel(1,:), 'r', t, vel(2,:), 'g', t, vel(3,:), 'b')
-    title('TRUTH: Velocity (m/s)')
-    xlabel('Time (s)')
-    ylabel('vel (m/s)')
-    grid on
-    legend('v_x (m)', 'v_y (m)', 'v_z (m)', 'Location', 'Best')
-    hold off
-    
-    % Attitude (Euler Angles)
-    figure
-    hold on
-    subplot(3,1,1)
-    plot(t, rpy(1,:), 'r')
-    title('TRUTH: Roll')
-    xlabel('Time (s)')
-    ylabel('\phi (deg)')
-    grid on
-    subplot(3,1,2)
-    plot(t, rpy(2,:), 'g')
-    title('TRUTH: Pitch')
-    xlabel('Time (s)')
-    ylabel('\theta (deg)')
-    grid on
-    subplot(3,1,3)
-    plot(t, rpy(3,:), 'b')
-    title('TRUTH: Yaw')
-    xlabel('Time (s)')
-    ylabel('\psi (deg)')
-    grid on
-    hold off
-    
-end
+% Plotting PVA Errors______________________________________________________
+delta_p_flag = false;
+delta_v_flag = false;
+delta_a_flag = false;
+
+%**************************************************************************
+%% Plot Ground Truth
+
+plot_truth(motion_3D_flag, p_truth_flag, v_truth_flag, a_truth_flag, out, P)
 
 %% PVA Meas ---------------------------------------------------------------
 
-if (flag_PVA_meas)
-    
-    % Extract Variables
-    [pos, vel, rpy] = extract_PVA(out.P_meas.Data, ...
-                                  out.V_meas.Data, ...
-                                  out.A_meas.Data);
-    
-    % Position
-    figure
-    hold on
-    plot(t, pos(1,:), 'r', t, pos(2,:), 'g',t, pos(3,:), 'b')
-    title('MEAS: Position (m)')
-    xlabel('Time (s)')
-    ylabel('r^t_tb (m)')
-    grid on
-    legend('r_x (m)', 'r_y (m)', 'r_z (m)', 'Location', 'Best')
-    hold off
-    
-    % Velocity
-    figure
-    hold on
-    plot(t, vel(1,:), 'r', t, vel(2,:), 'g', t, vel(3,:), 'b')
-    title('MEAS: Velocity (m/s)')
-    xlabel('Time (s)')
-    ylabel('vel (m/s)')
-    grid on
-    legend('v_x (m)', 'v_y (m)', 'v_z (m)', 'Location', 'Best')
-    hold off
-    
-    % Attitude (Euler Angles)
-    figure
-    hold on
-    subplot(3,1,1)
-    plot(t, rpy(1,:), 'r')
-    title('MEAS: Roll')
-    xlabel('Time (s)')
-    ylabel('\phi (deg)')
-    grid on
-    subplot(3,1,2)
-    plot(t, rpy(2,:), 'g')
-    title('MEAS: Pitch')
-    xlabel('Time (s)')
-    ylabel('\theta (deg)')
-    grid on
-    subplot(3,1,3)
-    plot(t, rpy(3,:), 'b')
-    title('MEAS: Yaw')
-    xlabel('Time (s)')
-    ylabel('\psi (deg)')
-    grid on
-    hold off
-    
-end
+plot_meas(p_meas_flag, v_meas_flag, a_meas_flag, out, P)
 
-%% IMU Truth --------------------------------------------------------------
+%% Plot IMU I/O -----------------------------------------------------------
 
-if (flag_IMU_truth)
-    
-    % Accels:  Specific Force (N)
-    figure
-    hold on
-    subplot(3,1,1)
-    plot(t, out.accel_truth.Data(:,1), 'r')
-    title('IMU Truth: X-axis specific force')
-    xlabel('Time (s)')
-    ylabel('Acceleration (m/s^2)')
-    grid on
-    subplot(3,1,2)
-    plot(t, out.accel_truth.Data(:,2), 'g')
-    title('IMU Truth: Y-axis specific force')
-    xlabel('Time (s)')
-    ylabel('Acceleration (m/s^2)')
-    grid on
-    subplot(3,1,3)
-    plot(t, out.accel_truth.Data(:,3), 'b')
-    title('IMU Truth: Z-axis specific force')
-    xlabel('Time (s)')
-    ylabel('Acceleration (m/s^2)')
-    grid on
-    hold off
-    
-    % Gyros:  Rotation Rates  (deg/s)
-    figure
-    hold on
-    subplot(3,1,1)
-    plot(t, out.gyro_truth.Data(:,1) * 180/pi, 'r')
-    title('IMU Truth: X-axis angular velocity')
-    xlabel('Time (s)')
-    ylabel('Angular Velocity (deg/s)')
-    grid on
-    subplot(3,1,2)
-    plot(t, out.gyro_truth.Data(:,2) * 180/pi, 'g')
-    title('IMU Truth: Y-axis angular velocity')
-    xlabel('Time (s)')
-    ylabel('Angular Velocity (deg/s)')
-    grid on
-    subplot(3,1,3)
-    plot(t, out.gyro_truth.Data(:,3) * 180/pi, 'b')
-    title('IMU Truth: Z-axis angular velocity')
-    xlabel('Time (s)')
-    ylabel('Angular Velocity (deg/s)')
-    grid on
-    
-end
+plot_IMU(accel_truth_flag, accel_meas_flag, ...
+                  gyro_truth_flag,  gyro_meas_flag, ...
+                  delta_accel_flag, delta_gyro_flag, ...
+                  out, P)
+              
+%% Plot PVA Error ---------------------------------------------------------
 
-%% IMU Meas --------------------------------------------------------------
-
-if (flag_IMU_meas)
-    
-    % Accels:  Specific Force (N)
-    figure
-    hold on
-    subplot(3,1,1)
-    plot(t, out.accel_meas.Data(:,1), 'r')
-    title('IMU Meas: X-axis specific force')
-    xlabel('Time (s)')
-    ylabel('Acceleration (m/s^2)')
-    grid on
-    subplot(3,1,2)
-    plot(t, out.accel_meas.Data(:,2), 'g')
-    title('IMU Meas: Y-axis specific force')
-    xlabel('Time (s)')
-    ylabel('Acceleration (m/s^2)')
-    grid on
-    subplot(3,1,3)
-    plot(t, out.accel_meas.Data(:,3), 'b')
-    title('IMU Meas: Z-axis specific force')
-    xlabel('Time (s)')
-    ylabel('Acceleration (m/s^2)')
-    grid on
-    hold off
-    
-    % Gyros:  Rotation Rates  (deg/s)
-    figure
-    hold on
-    subplot(3,1,1)
-    plot(t, out.gyro_meas.Data(:,1) * 180/pi, 'r')
-    title('IMU Meas: X-axis angular velocity')
-    xlabel('Time (s)')
-    ylabel('Angular Velocity (deg/s)')
-    grid on
-    subplot(3,1,2)
-    plot(t, out.gyro_meas.Data(:,2) * 180/pi, 'g')
-    title('IMU Meas: Y-axis angular velocity')
-    xlabel('Time (s)')
-    ylabel('Angular Velocity (deg/s)')
-    grid on
-    subplot(3,1,3)
-    plot(t, out.gyro_meas.Data(:,3) * 180/pi, 'b')
-    title('IMU Meas: Z-axis angular velocity')
-    xlabel('Time (s)')
-    ylabel('Angular Velocity (deg/s)')
-    grid on
-    
-end
-
-end
+plot_error(delta_p_flag, delta_v_flag, delta_a_flag, out, P)
