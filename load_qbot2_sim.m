@@ -9,8 +9,12 @@ open('qbot2_sim')
 init_qbot2_params;
 
 % Load Qbot2 IMU Calibration Results
-P.IMU_prop_flag = true;
+P.IMU_prop_flag = true; % set to false for monte carlo
 IMU_Error_Properties;
+
+% Load Qbot 2 Motion Plan
+P.plot_motion_plan_flag = false; 
+qbot2_motion_plan;
 
 % Plotting Flag
 P.plotsim_flag = true;

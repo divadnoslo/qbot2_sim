@@ -1,8 +1,8 @@
 % init_qbot2_params.m
 
 % Load all paramters regarding the simulation to the workspace
-
-%% Qbot2 Simulation Model Parameters
+    
+%% Qbot 2 Simulation Model Parameters
 P.Fs  = 100;                % Sample frequency (Hz)
 P.dt  = 1/P.Fs;             % Sample interval (sec)
 P.t_start = 0;              % Simulation start time (sec)
@@ -17,7 +17,7 @@ P.diameter = 0.35; % m
 P.radius = P.diameter / 2;
 P.max_speed = 0.7;  % m/s
 
-%% Qbot2 Depth Sensor Range
+%% Qbot 2 Depth Sensor Range
 P.min_range = 0.5; % m
 P.max_range = 6; % m
 

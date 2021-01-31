@@ -12,15 +12,15 @@ v_truth_flag   = true;
 a_truth_flag   = true;
 
 % Plotting  PVA Measurements_______________________________________________
-p_meas_flag = true;
-v_meas_flag = true;
-a_meas_flag = true;
+p_meas_flag = false;
+v_meas_flag = false;
+a_meas_flag = false;
 
 % Plotting IMU Truth & Meas________________________________________________
 accel_truth_flag = true;
-accel_meas_flag  = true;
+accel_meas_flag  = false;
 gyro_truth_flag  = true;
-gyro_meas_flag   = true;
+gyro_meas_flag   = false;
 delta_accel_flag = false;
 delta_gyro_flag  = false;
 

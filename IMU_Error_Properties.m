@@ -16,13 +16,13 @@ P.accel.colored_noise_accel_flag = true;
 
 
 % Gyro Constant Errors
-P.gyro.b_g_FB_flag = false;
-P.gyro.M_g_flag = false;
-P.gyro.gyro_sens_flag = false;
+P.gyro.b_g_FB_flag = true;
+P.gyro.M_g_flag = true;
+P.gyro.gyro_sens_flag = true;
 
 % Gyro Varying Errors
-P.gyro.white_noise_gyro_flag = false;
-P.gyro.colored_noise_gyro_flag = false;
+P.gyro.white_noise_gyro_flag = true;
+P.gyro.colored_noise_gyro_flag = true;
 %**************************************************************************
 end 
 
@@ -100,3 +100,7 @@ else
     P.gyro.BI.sigma_n = zeros(3,1);
     P.gyro.BI.correlation_time = 1;
 end
+
+%% Clear Uneccessary Variables from the workspace
+
+clear accel_std b_a_FB b_g_FB gyro_std M_a M_g sigma_n_accel sigma_n_gyro
