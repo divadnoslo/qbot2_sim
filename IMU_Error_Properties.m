@@ -7,8 +7,8 @@
 if (P.IMU_prop_flag)
 %**************************************************************************
 % Accel Constant Errors
-P.accel.b_a_FB_flag = true;
-P.accel.M_a_flag = true;
+P.accel.b_a_FB_flag = false;
+P.accel.M_a_flag = false;
 
 % Accel Varying Errors
 P.accel.white_noise_accel_flag = true;
@@ -16,9 +16,9 @@ P.accel.colored_noise_accel_flag = true;
 
 
 % Gyro Constant Errors
-P.gyro.b_g_FB_flag = true;
-P.gyro.M_g_flag = true;
-P.gyro.gyro_sens_flag = true;
+P.gyro.b_g_FB_flag = false;
+P.gyro.M_g_flag = false;
+P.gyro.gyro_sens_flag = false;
 
 % Gyro Varying Errors
 P.gyro.white_noise_gyro_flag = true;

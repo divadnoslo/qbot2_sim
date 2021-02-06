@@ -5,15 +5,15 @@
 % 'Mode 2' = angular    -> amount of angle psi to turn (rad) (NED Frame)
 % 'Mode 3' = linear     -> distance forward to drive (meters)
 
-% % Clock Wise Box
-% P.motion_plan = {"Mode 3", 2; ...
-%                  "Mode 2", pi/2; ...
-%                  "Mode 3", 2; ...
-%                  "Mode 2", pi/2; ...
-%                  "Mode 3", 2; ...
-%                  "Mode 2", pi/2; ...
-%                  "Mode 3", 2; ...
-%                  "Mode 2", pi/2};
+% Clock Wise Box
+P.motion_plan = {"Mode 3", 2; ...
+                 "Mode 2", pi/2; ...
+                 "Mode 3", 2; ...
+                 "Mode 2", pi/2; ...
+                 "Mode 3", 2; ...
+                 "Mode 2", pi/2; ...
+                 "Mode 3", 2; ...
+                 "Mode 2", pi/2};
 
 % % Counter Clock Wise Box
 % P.motion_plan = {"Mode 3", 2; ...
@@ -25,16 +25,16 @@
 %                  "Mode 3", 2; ...
 %                  "Mode 2", -pi/2};
              
-% King Building Hallway Mock-up
-P.motion_plan = {"Mode 3",     2; ...
-                 "Mode 2",     pi/4; ...
-                 "Mode 3",     sqrt(0.5^2 + 0.5^2); ...
-                 "Mode 2",     pi/4;...
-                 "Mode 3",     1; ...
-                 "Mode 2",     pi/2; ...
-                 "Mode 3",     2.5; ...
-                 "Mode 2",     pi/2; ...
-                 "Mode 3",     1.5};
+% % King Building Hallway Mock-up
+% P.motion_plan = {"Mode 3",     2; ...
+%                  "Mode 2",     pi/4; ...
+%                  "Mode 3",     sqrt(0.5^2 + 0.5^2); ...
+%                  "Mode 2",     pi/4;...
+%                  "Mode 3",     1; ...
+%                  "Mode 2",     pi/2; ...
+%                  "Mode 3",     2.5; ...
+%                  "Mode 2",     pi/2; ...
+%                  "Mode 3",     1.5};
              
 %% Build Motion Plan
 % Variables to Consider
@@ -42,19 +42,19 @@ P.motion_plan = {"Mode 3",     2; ...
 [num_steps, ~] = size(P.motion_plan);
 r_t__t_b_old = [0; 0; 0];
 C_t__b_old = eye(3);
-
+r_wheel_old = [0; 0];
 
 for ii = 1 : num_steps
     
     % Generate body frame motion according to mode of travel
     if (P.motion_plan{ii,1} == "Mode 1")
-        [t_k, r_b__t_b, v_b__t_b, a_b__t_b, C_b__b_1, w_b__t_b] = ...
+        [t_k, r_w, r_b__t_b, v_b__t_b, a_b__t_b, C_b__b_1, w_b__t_b] = ...
            qbot2_stationary_motion_gen(P.motion_plan{ii,2}, P);
     elseif (P.motion_plan{ii,1} == "Mode 2")
-        [t_k, r_b__t_b, v_b__t_b, a_b__t_b, C_b__b_1, w_b__t_b] = ...
+        [t_k, r_w, r_b__t_b, v_b__t_b, a_b__t_b, C_b__b_1, w_b__t_b] = ...
               qbot2_angular_motion_gen(P.motion_plan{ii,2}, P);
     elseif (P.motion_plan{ii,1} == "Mode 3")
-        [t_k, r_b__t_b, v_b__t_b, a_b__t_b, C_b__b_1, w_b__t_b] = ...
+        [t_k, r_w, r_b__t_b, v_b__t_b, a_b__t_b, C_b__b_1, w_b__t_b] = ...
                qbot2_linear_motion_gen(P.motion_plan{ii,2}, P);
     else
         error('Mode of Motion not recognized, check your spelling')
@@ -80,11 +80,22 @@ for ii = 1 : num_steps
         v_t__t_b(1:3,jj) = C_t__b(:,:,jj) * v_b__t_b(:,jj-k_prev);
         r_t__t_b(1:3,jj) = C_t__b(:,:,jj) * r_b__t_b(:,jj-k_prev) + r_t__t_b_old;
         w_t__t_b(1:3,jj) = C_t__b(:,:,jj) * w_b__t_b(:,jj-k_prev);
+        r_wheel(1:2,jj)  = r_w(:,jj-k_prev) + r_wheel_old;
+        
+        % Passing Mode
+        if (P.motion_plan{ii,1} == "Mode 1")
+            mode(jj) = 1;
+        elseif (P.motion_plan{ii,1} == "Mode 2")
+            mode(jj) = 2;
+        elseif (P.motion_plan{ii,1} == "Mode 3")
+            mode(jj) = 3;
+        end
     end
     
     % Capture End State for next instruction
     C_t__b_old = C_t__b(:,:,k_next(end));
     r_t__t_b_old = r_t__t_b(:,k_next(end));
+    r_wheel_old = [r_wheel(1,end); r_wheel(2,end)];
     
 end
 
@@ -97,6 +108,8 @@ P.a_t__t_b = a_t__t_b;
 P.C_t__b = C_t__b;
 P.w_t__t_b = w_t__t_b;
 P.t_end = t(end);
+P.r_wheel = r_wheel;
+P.mode = mode;
 
 %% Plot Resulting Path of the Robot
 
@@ -178,25 +191,37 @@ if (P.plot_motion_plan_flag == true)
     grid on
     xlim([0 t(end)])
     
+    figure
+    hold on
+    plot(t, r_wheel(1,:), 'g')
+    plot(t, r_wheel(2,:), 'r')
+    title('Qbot2 Wheel Position')
+    xlabel('Time (s)')
+    ylabel('Arc Length Turned (m)')
+    legend('Left Wheel', 'Right Wheel', 'Location', 'Best')
+    grid on
+
 end
     
 %% Clear unneeded variables from the workspace
 
 clear a_b__t_b a_t__t_b C_b__b_1 C_t__b C_t__b_old ii jj k k_next k_prev kk 
 clear num_steps plot_motion_flag r_b__t_b r_t__t_b r_t__t_b_old t t_k
-clear v_b__t_b v_t__t_b w_b__t_b w_t__t_b yaw ans C_v__t r_v__t_b
+clear v_b__t_b v_t__t_b w_b__t_b w_t__t_b yaw ans C_v__t r_v__t_b r_w
+clear r_wheel r_wheel_old mode
 P = rmfield(P, 'motion_plan');
 
 %% Stationary Motion Generation Function
 
-function [t_k, r_b__t_b, v_b__t_b, a_b__t_b, C_t__b, w_b__t_b] = ...
+function [t_k, r_w, r_b__t_b, v_b__t_b, a_b__t_b, C_t__b, w_b__t_b] = ...
                      qbot2_stationary_motion_gen(time_pause, P)
 
 t_k = 0 : P.dt : time_pause;                 
 r_b__t_b = zeros(3,1,length(t_k));
 v_b__t_b = zeros(3,1,length(t_k));
 a_b__t_b = zeros(3,1,length(t_k));
-w_b__t_b = zeros(3,1,length(t_k));                 
+w_b__t_b = zeros(3,1,length(t_k));
+r_w = zeros(2, length(t_k));
                  
 for k = 1 : length(0:P.dt:time_pause)
     C_t__b(:,:,k) = eye(3);
@@ -207,7 +232,7 @@ end
 
 %% Linear Motion Generation
 
-function [t_k, r_b__t_b, v_b__t_b, a_b__t_b, C_t__b, w_b__t_b] = ...
+function [t_k, r_w, r_b__t_b, v_b__t_b, a_b__t_b, C_t__b, w_b__t_b] = ...
                               qbot2_linear_motion_gen(r_des, P)
 
 dt = P.dt;
@@ -284,12 +309,13 @@ for k = 1 : length(t_k)
     C_t__b(:,:,k) = eye(3);
 end
 w_b__t_b = zeros(3, length(t_k));
+r_w = [r_l; r_l];
 
 end
 
 %% Angular Motion Generation
 
-function [t_k, r_b__t_b, v_b__t_b, a_b__t_b, C_t__b, w_b__t_b] = ...
+function [t_k, r_w, r_b__t_b, v_b__t_b, a_b__t_b, C_t__b, w_b__t_b] = ...
                           qbot2_angular_motion_gen(psi_des, P)
 
 dt = P.dt;
@@ -375,5 +401,6 @@ for k = 1 : length(t_k)
     C_t__b(:,:,k) = rotate_z(psi(k));
 end
 w_b__t_b = [zeros(2,length(t_k)); w_z];
+r_w = [r_l; -r_l];
 
 end

@@ -17,6 +17,16 @@ P.diameter = 0.35; % m
 P.radius = P.diameter / 2;
 P.max_speed = 0.7;  % m/s
 
+% Odometry Parameters
+P.wheel_circumfrence = 0.22037; % m
+P.wheel_radius = 0.03507;       % m
+P.ticks2wheelRev = 2578.33;     % ratio
+P.theta_tick = (2*pi)/P.ticks2wheelRev;  % rad
+P.encoder_cnt = 4096;           % ratio
+P.sigma_enc = 5;               % 20 clicks
+P.sigma_arc = P.theta_tick * P.sigma_enc * P.wheel_radius; % m
+P.odo_error_flag = true;
+
 %% Qbot 2 Depth Sensor Range
 P.min_range = 0.5; % m
 P.max_range = 6; % m
