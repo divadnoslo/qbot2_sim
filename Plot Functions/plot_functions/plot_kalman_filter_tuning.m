@@ -4,24 +4,19 @@ function plot_kalman_filter_tuning(r_KF_flag, v_KF_flag, psi_KF_flag, out, P)
 % Extract Time
 t = out.tout;
 
-% Extract Variables
-[pos, vel, rpy] = extract_PVA(out.P_truth.Data, ...
-    out.V_truth.Data, ...
-    out.A_truth.Data);
-
 % Format P
 P = format_P(out.P_posteriori.Data);
 
 if (r_KF_flag == true)
     
     % Calculate Truth minus Error
-    r_error = pos - out.delta_x_t__t_b_est.Data(:,(1:3))';
+    r_error = out.delta_r_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(1:3))';
     
     figure
     hold on
     plot(t, r_error(1,:), 'r')
     plot(t, P(1,:), 'k', t, -P(1,:), 'k')
-    title('r^t_t_b_,_x error = truth - est')
+    title('r^t_t_b_,_x error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('Position (m)')
@@ -32,7 +27,7 @@ if (r_KF_flag == true)
     hold on
     plot(t, r_error(2,:), 'g')
     plot(t, P(2,:), 'k', t, -P(2,:), 'k')
-    title('r^t_t_b_,_y error = truth - est')
+    title('r^t_t_b_,_y error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('Position (m)')
@@ -43,7 +38,7 @@ if (r_KF_flag == true)
     hold on
     plot(t, r_error(3,:), 'b')
     plot(t, P(3,:), 'k', t, -P(3,:), 'k')
-    title('r^t_t_b_,_z error = truth - est')
+    title('r^t_t_b_,_z error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('Position (m)')
@@ -56,13 +51,13 @@ end
 if (v_KF_flag == true)
     
     % Calculate Truth minus Error
-    v_error = vel - out.delta_x_t__t_b_est.Data(:,(4:6))';
+    v_error = out.delta_v_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(4:6))';
     
     figure
     hold on
     plot(t, v_error(1,:), 'r')
     plot(t, P(4,:), 'k', t, -P(4,:), 'k')
-    title('v^t_t_b_,_x error = truth - est')
+    title('v^t_t_b_,_x error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('Velocity (m/s)')
@@ -73,7 +68,7 @@ if (v_KF_flag == true)
     hold on
     plot(t, v_error(2,:), 'g')
     plot(t, P(5,:), 'k', t, -P(5,:), 'k')
-    title('v^t_t_b_,_y error = truth - est')
+    title('v^t_t_b_,_y error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('Velocity (m/s)')
@@ -84,7 +79,7 @@ if (v_KF_flag == true)
     hold on
     plot(t, v_error(3,:), 'b')
     plot(t, P(6,:), 'k', t, -P(6,:), 'k')
-    title('v^t_t_b_,_z error = truth - est')
+    title('v^t_t_b_,_z error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('Velocity (m/s)')
@@ -97,13 +92,13 @@ end
 if (psi_KF_flag == true)
     
         % Calculate Truth minus Error
-    psi_error = rpy - out.delta_x_t__t_b_est.Data(:,(7:9))';
+    psi_error = out.delta_psi_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(7:9))';
     
     figure
     hold on
     plot(t, psi_error(1,:) * 180/pi, 'r')
     plot(t, P(7,:) * 180/pi, 'k', t, -P(7,:) * 180/pi, 'k')
-    title('\psi^t_t_b_,_\phi error = truth - est')
+    title('\psi^t_t_b_,_\phi error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('Roll (\circ)')
@@ -114,7 +109,7 @@ if (psi_KF_flag == true)
     hold on
     plot(t, psi_error(2,:) * 180/pi, 'g')
     plot(t, P(8,:) * 180/pi, 'k', t, -P(8,:) * 180/pi, 'k')
-    title('\psi^t_t_b_,_\theta error = truth - est')
+    title('\psi^t_t_b_,_\theta error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('Pitch (\circ)')
@@ -125,7 +120,7 @@ if (psi_KF_flag == true)
     hold on
     plot(t, psi_error(3,:) * 180/pi, 'b')
     plot(t, P(9,:) * 180/pi, 'k', t, -P(9,:) * 180/pi, 'k')
-    title('\psi^t_t_b_,_\psi error = truth - est')
+    title('\psi^t_t_b_,_\psi error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('Yaw (\circ)')

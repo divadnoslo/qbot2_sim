@@ -2,6 +2,12 @@
 
 % Initializer for qbot2_sim.slx
 
+% % Clear Previous Simulation and Parameter Data
+% if (isempty(out) ~= 1)
+%     clear out
+%     clear P
+% end
+
 % Open Simulink Model
 open('qbot2_sim')
 

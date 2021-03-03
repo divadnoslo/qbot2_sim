@@ -5,24 +5,27 @@
 % 'Mode 2' = angular    -> amount of angle psi to turn (rad) (NED Frame)
 % 'Mode 3' = linear     -> distance forward to drive (meters)
 
+% % Staying Still for an amount of time
+% P.motion_plan = {"Mode 1", 10};
+
 % Clock Wise Box
-P.motion_plan = {"Mode 3", 2; ...
+P.motion_plan = {"Mode 3", 1; ...
                  "Mode 2", pi/2; ...
-                 "Mode 3", 2; ...
+                 "Mode 3", 1; ...
                  "Mode 2", pi/2; ...
-                 "Mode 3", 2; ...
+                 "Mode 3", 1; ...
                  "Mode 2", pi/2; ...
-                 "Mode 3", 2; ...
+                 "Mode 3", 1; ...
                  "Mode 2", pi/2};
 
 % % Counter Clock Wise Box
-% P.motion_plan = {"Mode 3", 2; ...
+% P.motion_plan = {"Mode 3", 1; ...
 %                  "Mode 2", -pi/2; ...
-%                  "Mode 3", 2; ...
+%                  "Mode 3", 1; ...
 %                  "Mode 2", -pi/2; ...
-%                  "Mode 3", 2; ...
+%                  "Mode 3", 1; ...
 %                  "Mode 2", -pi/2; ...
-%                  "Mode 3", 2; ...
+%                  "Mode 3", 1; ...
 %                  "Mode 2", -pi/2};
              
 % % King Building Hallway Mock-up
@@ -76,7 +79,7 @@ for ii = 1 : num_steps
     % Bring Body Motions into the Tangential Frame
     for jj = k_next
         C_t__b(:,:,jj) = C_b__b_1(:,:,jj-k_prev) * C_t__b_old;
-        a_t__t_b(1:3,jj) = C_t__b(:,:,jj) * a_b__t_b(:,jj-k_prev) + P.g_t__b;
+        a_t__t_b(1:3,jj) = C_t__b(:,:,jj) * a_b__t_b(:,jj-k_prev);
         v_t__t_b(1:3,jj) = C_t__b(:,:,jj) * v_b__t_b(:,jj-k_prev);
         r_t__t_b(1:3,jj) = C_t__b(:,:,jj) * r_b__t_b(:,jj-k_prev) + r_t__t_b_old;
         w_t__t_b(1:3,jj) = C_t__b(:,:,jj) * w_b__t_b(:,jj-k_prev);
@@ -225,7 +228,7 @@ r_w = zeros(2, length(t_k));
                  
 for k = 1 : length(0:P.dt:time_pause)
     C_t__b(:,:,k) = eye(3);
-    a_b__t_b(:,k) = P.g_t__b;
+    a_b__t_b(:,k) = zeros(3,1);
 end
 
 end
@@ -304,7 +307,7 @@ end
 % Build Function Outputs
 r_b__t_b = [r_l; zeros(2,length(t_k))];
 v_b__t_b = [v_l; zeros(2,length(t_k))];
-a_b__t_b = [a_l; P.g_t__b(2:3).*ones(2,length(t_k))];
+a_b__t_b = [a_l; zeros(2,length(t_k))];
 for k = 1 : length(t_k)
     C_t__b(:,:,k) = eye(3);
 end
@@ -396,11 +399,16 @@ psi = sign_psi*(abs(psi_des)/r_des) .* r_l;
 % Build Function Outputs
 r_b__t_b = zeros(3, length(t_k));
 v_b__t_b = zeros(3, length(t_k));
-a_b__t_b = P.g_t__b .* ones(3,length(t_k));
+a_b__t_b = zeros(3,length(t_k));
 for k = 1 : length(t_k)
     C_t__b(:,:,k) = rotate_z(psi(k));
 end
 w_b__t_b = [zeros(2,length(t_k)); w_z];
-r_w = [r_l; -r_l];
+
+if (psi(k) > 0)
+    r_w = [r_l; -r_l];
+else
+    r_w = [-r_l; r_l];
+end
 
 end

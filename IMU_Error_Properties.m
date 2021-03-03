@@ -51,17 +51,17 @@ end
 
 % Set Accel Varying Errors
 if (P.accel.white_noise_accel_flag == true)
-    P.accel.sigma_VRW = accel_std;
+    P.accel.sigma_VRW = sigma_VRW;
 else
     P.accel.sigma_VRW = zeros(3,1);
 end
 
 if (P.accel.colored_noise_accel_flag == true)
     P.accel.BI.sigma_n = sigma_n_accel;
-    P.accel.BI.correlation_time = 1; % Unknown thus far
+    P.accel.BI.correlation_time = 0.1; % Unknown thus far
 else
     P.accel.BI.sigma_n = zeros(3,1);
-    P.accel.BI.correlation_time = 1;
+    P.accel.BI.correlation_time = 0.1;
 end
 
 %__________________________________________________________________________
@@ -88,19 +88,20 @@ end
 
 % Set Gyro Varying Errors
 if (P.gyro.white_noise_gyro_flag == true)
-    P.gyro.sigma_ARW = gyro_std;
+    P.gyro.sigma_ARW = sigma_ARW;
 else
     P.gyro.sigma_ARW = zeros(3,1);
 end
 
 if (P.gyro.colored_noise_gyro_flag == true)
     P.gyro.BI.sigma_n = sigma_n_gyro;
-    P.gyro.BI.correlation_time = 1; % unknown thus far
+    P.gyro.BI.correlation_time = 0.1; % unknown thus far
 else
     P.gyro.BI.sigma_n = zeros(3,1);
-    P.gyro.BI.correlation_time = 1;
+    P.gyro.BI.correlation_time = 0.1;
 end
 
 %% Clear Uneccessary Variables from the workspace
 
 clear accel_std b_a_FB b_g_FB gyro_std M_a M_g sigma_n_accel sigma_n_gyro
+clear accel_VRW gyro_ARW sigma_VRW sigma_ARW

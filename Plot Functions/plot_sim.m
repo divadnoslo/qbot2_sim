@@ -11,7 +11,7 @@ p_truth_flag   = false;
 v_truth_flag   = false;
 a_truth_flag   = false;
 
-% Plotting  PVA Measurements_______________________________________________
+% Plotting PVA Measurements________________________________________________
 p_meas_flag = false;
 v_meas_flag = false;
 a_meas_flag = false;
@@ -43,6 +43,17 @@ delta_psi_t__t_b_est_flag = false;
 r_KF_flag   = true;
 v_KF_flag   = true;
 psi_KF_flag = true;
+
+% Plotting Truth vs Estimates______________________________________________
+r_truth_vs_est_flag   = true;
+v_truth_vs_est_flag   = true;
+psi_truth_vs_est_flag = true;
+
+% Plotting Fake Aiding Sensor Outputs______________________________________
+plot_fake_r = false;
+plot_fake_v = false;
+plot_fake_a = false;
+
 
 %**************************************************************************
 %% Plot Ground Truth
@@ -77,4 +88,12 @@ plot_state_est_error(delta_r_t__t_b_est_flag, delta_v_t__t_b_est_flag, ...
 
 plot_kalman_filter_tuning(r_KF_flag, v_KF_flag, psi_KF_flag, out, P)
                  
+%% Plot Truth vs Estimates-------------------------------------------------
+
+plot_truth_vs_est(r_truth_vs_est_flag, v_truth_vs_est_flag, ...
+                                             psi_truth_vs_est_flag, out, P)
+                                         
+%% Plot Fake Aiding Sensor Outputs
+
+plot_fake(plot_fake_r, plot_fake_v, plot_fake_a, out, P)
                  

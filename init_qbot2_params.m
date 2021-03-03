@@ -3,7 +3,7 @@
 % Load all paramters regarding the simulation to the workspace
     
 %% Qbot 2 Simulation Model Parameters
-P.Fs  = 100;                % Sample frequency (Hz)
+P.Fs  = 50;                 % Sample frequency (Hz)
 P.dt  = 1/P.Fs;             % Sample interval (sec)
 P.t_start = 0;              % Simulation start time (sec)
 P.t_end = 60;              % Simulation end time (sec)
@@ -23,9 +23,9 @@ P.wheel_radius = 0.03507;       % m
 P.ticks2wheelRev = 2578.33;     % ratio
 P.theta_tick = (2*pi)/P.ticks2wheelRev;  % rad
 P.encoder_cnt = 4096;           % ratio
-P.sigma_enc = 5;               % 20 clicks
+P.sigma_enc = 5 * pi/180 *(1/P.theta_tick); % degrees worth of encoder clicks
 P.sigma_arc = P.theta_tick * P.sigma_enc * P.wheel_radius; % m
-P.odo_error_flag = true;
+P.odo_error_flag = true;  % turns on/off odometry error sources
 
 %% Qbot 2 Depth Sensor Range
 P.min_range = 0.5; % m
@@ -65,6 +65,9 @@ P.g_n__bD = [0; 0; gravity(P.L_b, P.h_b, P)];          % Compute the acceleratio
 P.g_e__b = P.C_e__n * P.g_n__bD;                       % Compute the gravity of the body in the {e} frame
 P.g_t__b = P.C_e__t' * P.g_e__b;                       % Compute the gravity of the body in the {t} frame
 
-
+%% Fake Aiding Sensor Parameters
+P.fake_sigma_r = 0.25 * ones(3,1);
+P.fake_sigma_v = 0.1 * ones(3,1);
+P.fake_sigma_a = 3 * pi/180 * ones(3,1);
 
 
