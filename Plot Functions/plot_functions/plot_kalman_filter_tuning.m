@@ -1,4 +1,4 @@
-function plot_kalman_filter_tuning(r_KF_flag, v_KF_flag, psi_KF_flag, out, P)
+function plot_kalman_filter_tuning(r_KF_flag, v_KF_flag, psi_KF_flag, residuals_flag, out, P)
 % Plots truth minus estimate for error, w/ Covariance Matrix
 
 % Extract Time
@@ -13,9 +13,10 @@ if (r_KF_flag == true)
     r_error = out.delta_r_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(1:3))';
     
     figure
+    subplot(3,1,1)
     hold on
     plot(t, r_error(1,:), 'r')
-    plot(t, P(1,:), 'k', t, -P(1,:), 'k')
+    plot(t, P(7,:), 'k', t, -P(7,:), 'k')
     title('r^t_t_b_,_x error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
@@ -23,10 +24,10 @@ if (r_KF_flag == true)
     legend('r_x error', '\sigma_1_,_1', '-\sigma_1_,_1', 'Location', 'Best')
     grid on
     
-    figure
+    subplot(3,1,2)
     hold on
     plot(t, r_error(2,:), 'g')
-    plot(t, P(2,:), 'k', t, -P(2,:), 'k')
+    plot(t, P(8,:), 'k', t, -P(8,:), 'k')
     title('r^t_t_b_,_y error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
@@ -34,10 +35,10 @@ if (r_KF_flag == true)
     legend('r_y error', '\sigma_2_,_2', '-\sigma_2_,_2', 'Location', 'Best')
     grid on
     
-    figure
+    subplot(3,1,3)
     hold on
     plot(t, r_error(3,:), 'b')
-    plot(t, P(3,:), 'k', t, -P(3,:), 'k')
+    plot(t, P(9,:), 'k', t, -P(9,:), 'k')
     title('r^t_t_b_,_z error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
@@ -54,6 +55,7 @@ if (v_KF_flag == true)
     v_error = out.delta_v_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(4:6))';
     
     figure
+    subplot(3,1,1)
     hold on
     plot(t, v_error(1,:), 'r')
     plot(t, P(4,:), 'k', t, -P(4,:), 'k')
@@ -64,7 +66,7 @@ if (v_KF_flag == true)
     legend('v_x error', '\sigma_4_,_4', '-\sigma_4_,_4', 'Location', 'Best')
     grid on
     
-    figure
+    subplot(3,1,2)
     hold on
     plot(t, v_error(2,:), 'g')
     plot(t, P(5,:), 'k', t, -P(5,:), 'k')
@@ -75,7 +77,7 @@ if (v_KF_flag == true)
     legend('v_y error', '\sigma_5_,_5', '-\sigma_5_,_5', 'Location', 'Best')
     grid on
     
-    figure
+    subplot(3,1,3)
     hold on
     plot(t, v_error(3,:), 'b')
     plot(t, P(6,:), 'k', t, -P(6,:), 'k')
@@ -95,9 +97,10 @@ if (psi_KF_flag == true)
     psi_error = out.delta_psi_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(7:9))';
     
     figure
+    subplot(3,1,1)
     hold on
     plot(t, psi_error(1,:) * 180/pi, 'r')
-    plot(t, P(7,:) * 180/pi, 'k', t, -P(7,:) * 180/pi, 'k')
+    plot(t, P(1,:) * 180/pi, 'k', t, -P(1,:) * 180/pi, 'k')
     title('\psi^t_t_b_,_\phi error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
@@ -105,10 +108,10 @@ if (psi_KF_flag == true)
     legend('\phi error', '\sigma_7_,_7', '-\sigma_7_,_7', 'Location', 'Best')
     grid on
     
-    figure
+    subplot(3,1,2)
     hold on
     plot(t, psi_error(2,:) * 180/pi, 'g')
-    plot(t, P(8,:) * 180/pi, 'k', t, -P(8,:) * 180/pi, 'k')
+    plot(t, P(2,:) * 180/pi, 'k', t, -P(2,:) * 180/pi, 'k')
     title('\psi^t_t_b_,_\theta error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
@@ -116,10 +119,10 @@ if (psi_KF_flag == true)
     legend('\theta error', '\sigma_8_,_8', '-\sigma_8_,_8', 'Location', 'Best')
     grid on
     
-    figure
+    subplot(3,1,3)
     hold on
     plot(t, psi_error(3,:) * 180/pi, 'b')
-    plot(t, P(9,:) * 180/pi, 'k', t, -P(9,:) * 180/pi, 'k')
+    plot(t, P(3,:) * 180/pi, 'k', t, -P(3,:) * 180/pi, 'k')
     title('\psi^t_t_b_,_\psi error = tan error mech - KF estimates')
     xlabel('Time (s)')
     xlim([0 t(end)])
@@ -129,6 +132,39 @@ if (psi_KF_flag == true)
     
 end
 
+if (residuals_flag == true)
+    
+    
+    figure
+    subplot(3,1,1)
+    hold on
+    plot(t, out.residuals.Data(:,1:3))
+    title('angular measurement residuals')
+    xlabel('Time (s)')
+    xlim([0 t(end)])
+    ylabel('error')
+    grid on
+    
+    subplot(3,1,2)
+    hold on
+    plot(t, out.residuals.Data(:,4:6))
+    title('velocity measurement residuals')
+    xlabel('Time (s)')
+    xlim([0 t(end)])
+    ylabel('error')
+    grid on
+    
+    subplot(3,1,3)
+    hold on
+    plot(t, out.residuals.Data(:,7:9))
+    title('position measurement residuals')
+    xlabel('Time (s)')
+    xlim([0 t(end)])
+    ylabel('error')
+    grid on
+    
+    
+end
 
 end
 

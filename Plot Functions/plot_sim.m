@@ -43,11 +43,12 @@ delta_psi_t__t_b_est_flag = false;
 r_KF_flag   = true;
 v_KF_flag   = true;
 psi_KF_flag = true;
+residuals_flag   = true;
 
 % Plotting Truth vs Estimates______________________________________________
-r_truth_vs_est_flag   = true;
-v_truth_vs_est_flag   = true;
-psi_truth_vs_est_flag = true;
+r_truth_vs_est_flag   = false;
+v_truth_vs_est_flag   = false;
+psi_truth_vs_est_flag = false;
 
 % Plotting Fake Aiding Sensor Outputs______________________________________
 plot_fake_r = false;
@@ -86,7 +87,7 @@ plot_state_est_error(delta_r_t__t_b_est_flag, delta_v_t__t_b_est_flag, ...
                  
 %% Plot Kalman Filter Tuning Check-----------------------------------------
 
-plot_kalman_filter_tuning(r_KF_flag, v_KF_flag, psi_KF_flag, out, P)
+plot_kalman_filter_tuning(r_KF_flag, v_KF_flag, psi_KF_flag, residuals_flag, out, P)
                  
 %% Plot Truth vs Estimates-------------------------------------------------
 
