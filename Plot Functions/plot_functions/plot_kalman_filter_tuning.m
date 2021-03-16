@@ -10,7 +10,8 @@ P = format_P(out.P_posteriori.Data);
 if (r_KF_flag == true)
     
     % Calculate Truth minus Error
-    r_error = out.delta_r_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(1:3))';
+    %r_error = out.delta_r_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(1:3))';
+    r_error = out.P_truth.Data' - out.r_t__t_b_est.Data';
     
     figure
     subplot(3,1,1)
@@ -52,7 +53,9 @@ end
 if (v_KF_flag == true)
     
     % Calculate Truth minus Error
-    v_error = out.delta_v_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(4:6))';
+    %v_error = out.delta_v_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(4:6))';
+    %v_error = out.delta_v_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(4:6))';
+    v_error = out.V_truth.Data' - out.v_t__t_b_est.Data';
     
     figure
     subplot(3,1,1)
@@ -93,8 +96,13 @@ end
 
 if (psi_KF_flag == true)
     
-        % Calculate Truth minus Error
-    psi_error = out.delta_psi_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(7:9))';
+    % Calculate Truth minus Error
+    %psi_error = out.delta_psi_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(7:9))';
+    psi_t__t_b = zeros(3,length(out.A_truth.Data));
+    for i=1:length(out.A_truth.Data)
+        [psi_t__t_b(3,i), psi_t__t_b(2,i), psi_t__t_b(1,i)] = dcm2ypr(out.A_truth.Data(:,:,i));
+    end
+    psi_error = psi_t__t_b - out.psi_t__t_b_est.Data';
     
     figure
     subplot(3,1,1)
