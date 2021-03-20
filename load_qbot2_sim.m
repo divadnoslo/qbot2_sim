@@ -9,8 +9,8 @@
 % end
 
 % Open Simulink Model
-open('qbot2_sim_2020b')
-%open('qbot2_sim')
+open('qbot2_sim_2020a')
+% open('qbot2_sim')
 
 % Load Qbot2 Parameters
 init_qbot2_params;
