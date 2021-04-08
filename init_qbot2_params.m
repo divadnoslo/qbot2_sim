@@ -66,8 +66,8 @@ P.g_e__b = P.C_e__n * P.g_n__bD;                       % Compute the gravity of 
 P.g_t__b = P.C_e__t' * P.g_e__b;                       % Compute the gravity of the body in the {t} frame
 
 %% Fake Aiding Sensor Parameters
-P.fake_sigma_r = 0.01 * ones(3,1);
-P.fake_sigma_v = 0.001 * ones(3,1);
-P.fake_sigma_a = 0.001 * pi/180 * ones(3,1);
+P.fake_sigma_r = 0.5 * ones(3,1);
+P.fake_sigma_v = 0.1 * ones(3,1);
+P.fake_sigma_a = 1 * pi/180 * ones(3,1);
 
 
