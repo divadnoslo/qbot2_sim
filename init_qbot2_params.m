@@ -23,8 +23,9 @@ P.wheel_radius = 0.03507;       % m
 P.ticks2wheelRev = 2578.33;     % ratio
 P.theta_tick = (2*pi)/P.ticks2wheelRev;  % rad
 P.encoder_cnt = 4096;           % ratio
-P.sigma_enc = 5 * pi/180 *(1/P.theta_tick); % degrees worth of encoder clicks
-P.sigma_arc = P.theta_tick * P.sigma_enc * P.wheel_radius; % m
+P.sigma_angle = 5 * pi/180;     % std-dev of angle of wheel
+P.sigma_enc = P.sigma_angle *(1/P.theta_tick); % degrees worth of encoder clicks
+P.sigma_arc = P.sigma_angle * P.wheel_radius; % m
 P.odo_error_flag = true;  % turns on/off odometry error sources
 
 %% Qbot 2 Depth Sensor Range

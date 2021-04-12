@@ -47,8 +47,8 @@ residuals_flag   = false;
 
 % Plotting Truth vs Estimates______________________________________________
 r_truth_vs_est_flag   = true;
-v_truth_vs_est_flag   = false;
-psi_truth_vs_est_flag = false;
+v_truth_vs_est_flag   = true;
+psi_truth_vs_est_flag = true;
 
 % Plotting Fake Aiding Sensor Outputs______________________________________
 plot_fake_r = false;
