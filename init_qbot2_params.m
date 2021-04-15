@@ -20,13 +20,19 @@ P.max_speed = 0.7;  % m/s
 % Odometry Parameters
 P.wheel_circumfrence = 0.22037; % m
 P.wheel_radius = 0.03507;       % m
-P.ticks2wheelRev = 2578.33;     % ratio
-P.theta_tick = (2*pi)/P.ticks2wheelRev;  % rad
-P.encoder_cnt = 4096;           % ratio
-P.sigma_angle = 5 * pi/180;     % std-dev of angle of wheel
-P.sigma_enc = P.sigma_angle *(1/P.theta_tick); % degrees worth of encoder clicks
-P.sigma_arc = P.sigma_angle * P.wheel_radius; % m
-P.odo_error_flag = true;  % turns on/off odometry error sources
+% P.ticks2wheelRev = 2578.33;     % ratio
+% P.theta_tick = (2*pi)/P.ticks2wheelRev;  % rad
+P.sigma_angle = 2 * pi/180;     % std-dev of angle of wheel
+P.sigma_odo_d = P.sigma_angle * P.wheel_radius; % m
+P.odo_error_flag = true;  % toggle to turn on/off odometry error sources
+
+% % LPF-Diff Constants
+% w = 25;
+% lpf = tf([w 0], [1 w]);
+% lpf_d = c2d(lpf, P.dt);
+% P.lpf_diff_num = lpf_d.Numerator{1};
+% P.lpf_diff_den = lpf_d.Denominator{1};
+% clear w lpf lpf_d
 
 %% Qbot 2 Depth Sensor Range
 P.min_range = 0.5; % m
