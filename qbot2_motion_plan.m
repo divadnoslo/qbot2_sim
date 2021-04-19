@@ -8,8 +8,11 @@
 % % Staying Still for an amount of time
 % P.motion_plan = {"Mode 1", 10};
 
-% Moving Forward for 30 meters
-P.motion_plan = {"Mode 3", 30};
+% % Moving Forward for 30 meters
+% P.motion_plan = {"Mode 3", 30};
+
+% Rotate in Place 4 Times
+P.motion_plan = {"Mode 2", 8*pi};
 
 % % Clock Wise Box
 % P.motion_plan = {"Mode 3", 1; ...

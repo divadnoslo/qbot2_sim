@@ -26,13 +26,14 @@ P.sigma_angle = 2 * pi/180;     % std-dev of angle of wheel
 P.sigma_odo_d = P.sigma_angle * P.wheel_radius; % m
 P.odo_error_flag = true;  % toggle to turn on/off odometry error sources
 
-% % LPF-Diff Constants
-% w = 25;
-% lpf = tf([w 0], [1 w]);
-% lpf_d = c2d(lpf, P.dt);
-% P.lpf_diff_num = lpf_d.Numerator{1};
-% P.lpf_diff_den = lpf_d.Denominator{1};
-% clear w lpf lpf_d
+% Complimentary Filter Constants
+w_c = 5 * (2*pi);  % rad/s
+lpf = tf([w_c], [1 w_c]);
+lpf_d = c2d(lpf, P.dt, 'tustin');
+P.lpf_num_1 = lpf_d.Numerator{1}(1);
+P.lpf_num_2 = lpf_d.Numerator{1}(2);
+P.lpf_den_1 = lpf_d.Denominator{1}(2);
+clear w_c lpf lpf_d
 
 %% Qbot 2 Depth Sensor Range
 P.min_range = 0.5; % m

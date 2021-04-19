@@ -40,9 +40,9 @@ delta_v_t__t_b_est_flag   = false;
 delta_psi_t__t_b_est_flag = false;
 
 % Plotting Kalman Filtering Tuning Check___________________________________
-r_KF_flag   = false;
-v_KF_flag   = false;
-psi_KF_flag = false;
+r_KF_flag   = true;
+v_KF_flag   = true;
+psi_KF_flag = true;
 residuals_flag   = false;
 
 % Plotting Truth vs Estimates______________________________________________
@@ -55,6 +55,10 @@ plot_fake_r = false;
 plot_fake_v = false;
 plot_fake_a = false;
 
+% Plot Complimentary Filter Output
+comp_filt_flag = false;
+psd_plot_flag = false;
+plot_omega_z_only = false;
 
 %**************************************************************************
 %% Plot Ground Truth
@@ -98,3 +102,6 @@ plot_truth_vs_est(r_truth_vs_est_flag, v_truth_vs_est_flag, ...
 
 plot_fake(plot_fake_r, plot_fake_v, plot_fake_a, out, P)
                  
+%% Plot Complimentary Filter Outputs
+
+plot_comp_filter(comp_filt_flag, psd_plot_flag, plot_omega_z_only, out, P)
