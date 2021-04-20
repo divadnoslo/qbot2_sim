@@ -128,6 +128,28 @@ if (plot_omega_z_only == true)
     grid on
     hold off
     
+    figure
+    subplot(2,1,1)
+    hold on
+    plot(t, (w_odo(:,3) - w_imu(:,3)) * 180/pi, 'b')
+    str1 = ['E[\omega_z_,_e_r_r_o_r] = ', num2str(mean((w_odo(:,3) - w_imu(:,3)) * 180/pi)), ' \circ/s  '];
+    str2 = ['\sigma_\omega = ', num2str(std((w_odo(:,3) - w_imu(:,3)) * 180/pi)), ' \circ/s'];
+    title(['\omega_z_,_o_d_o - \omega_z_,_i_m_u   ', str1, str2])
+    xlabel('Time (s)')
+    ylabel('\circ/s')
+    grid on
+    hold off
+    subplot(2,1,2)
+    w_lpf = out.w_t__t_b_lpf.Data(:,3);
+    hold on
+    plot(t, w_lpf * 180/pi, 'b')
+    str1 = ['E[\omega_z_,_l_p_f] = ', num2str(mean(w_lpf * 180/pi)), ' \circ/s  '];
+    str2 = ['\sigma_\omega = ', num2str(std(w_lpf * 180/pi)), ' \circ/s'];
+    title(['\omega_z_,_l_p_f   ', str1, str2])
+    xlabel('Time (s)')
+    ylabel('\circ/s')
+    grid on
+    hold off
 end
     
 end

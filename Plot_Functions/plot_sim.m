@@ -9,12 +9,12 @@ function plot_sim(out, P)
 motion_3D_flag = false;
 p_truth_flag   = false;
 v_truth_flag   = false;
-a_truth_flag   = false;
+a_truth_flag   = true;
 
 % Plotting PVA Measurements________________________________________________
 p_meas_flag = false;
 v_meas_flag = false;
-a_meas_flag = false;
+a_meas_flag = true;
 
 % Plotting IMU Truth & Meas________________________________________________
 accel_truth_flag = false;
@@ -27,38 +27,33 @@ delta_gyro_flag  = false;
 % Plotting PVA Errors from Tan Error Mech__________________________________
 delta_p_flag = false;
 delta_v_flag = false;
-delta_a_flag = false;
-
-% Plotting Odometry PVA____________________________________________________
-r_odo_flag = false;
-v_odo_flag = false;
-a_odo_flag = false;
+delta_a_flag = true;
 
 % Plotting State Estimates for PVA Errors__________________________________
 delta_r_t__t_b_est_flag   = false;
 delta_v_t__t_b_est_flag   = false;
-delta_psi_t__t_b_est_flag = false;
+delta_psi_t__t_b_est_flag = true;
 
 % Plotting Kalman Filtering Tuning Check___________________________________
-r_KF_flag   = true;
-v_KF_flag   = true;
-psi_KF_flag = true;
+r_KF_flag   = false;
+v_KF_flag   = false;
+psi_KF_flag = false;
 residuals_flag   = false;
 
 % Plotting Truth vs Estimates______________________________________________
 r_truth_vs_est_flag   = false;
 v_truth_vs_est_flag   = false;
-psi_truth_vs_est_flag = false;
+psi_truth_vs_est_flag = true;
 
 % Plotting Fake Aiding Sensor Outputs______________________________________
 plot_fake_r = false;
 plot_fake_v = false;
 plot_fake_a = false;
 
-% Plot Complimentary Filter Output
+% Plot Complimentary Filter Output_________________________________________
 comp_filt_flag = false;
 psd_plot_flag = false;
-plot_omega_z_only = false;
+plot_omega_z_only = true;
 
 %**************************************************************************
 %% Plot Ground Truth
@@ -79,10 +74,6 @@ plot_IMU(accel_truth_flag, accel_meas_flag, ...
 %% Plot PVA Error ---------------------------------------------------------
 
 plot_error(delta_p_flag, delta_v_flag, delta_a_flag, out, P)
-
-%% Plot Odometry PVA ------------------------------------------------------
-
-plot_odo_pva(r_odo_flag, v_odo_flag, a_odo_flag, out, P)
 
 %% Plot State Estimate for PVA Errors--------------------------------------
 

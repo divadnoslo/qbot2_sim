@@ -12,7 +12,7 @@
 % P.motion_plan = {"Mode 3", 30};
 
 % Rotate in Place 4 Times
-P.motion_plan = {"Mode 2", 8*pi};
+P.motion_plan = {"Mode 2", 32*pi};
 
 % % Clock Wise Box
 % P.motion_plan = {"Mode 3", 1; ...
