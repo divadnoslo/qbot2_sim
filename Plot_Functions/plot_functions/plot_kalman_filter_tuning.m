@@ -1,4 +1,4 @@
-function plot_kalman_filter_tuning(r_KF_flag, v_KF_flag, psi_KF_flag, residuals_flag, out, P)
+function plot_kalman_filter_tuning(r_KF_flag, v_KF_flag, psi_KF_flag, residuals_flag, meas_flag, out, P)
 % Plots truth minus estimate for error, w/ Covariance Matrix
 
 % Extract Time
@@ -180,5 +180,38 @@ if (residuals_flag == true)
     
 end
 
+if (meas_flag == true)
+    
+    figure
+    subplot(3,1,1)
+    hold on
+    plot(t, out.z_k(:,1), 'r')
+    title('\deltav^t_t_b_,_x')
+    xlabel('Time (s)')
+    xlim([0 t(end)])
+    ylabel('velocity error (m/s)')
+    grid on
+    
+    subplot(3,1,2)
+    hold on
+    plot(t, out.z_k(:,2), 'g')
+    title('\deltav^t_t_b_,_y')
+    xlabel('Time (s)')
+    xlim([0 t(end)])
+    ylabel('velocity error (m/s)')
+    grid on
+    
+    subplot(3,1,3)
+    hold on
+    plot(t, out.z_k(:,3), 'b')
+    title('\deltav^t_t_b_,_z')
+    xlabel('Time (s)')
+    xlim([0 t(end)])
+    ylabel('velocity error (m/s)')
+    grid on
+    
 end
+    
+
+
 
