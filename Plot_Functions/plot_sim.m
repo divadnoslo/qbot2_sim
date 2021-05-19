@@ -14,11 +14,11 @@ a_truth_flag   = false;
 % Plotting PVA Measurements________________________________________________
 p_meas_flag = false;
 v_meas_flag = false;
-a_meas_flag = false;
+a_meas_flag = true;
 
 % Plotting IMU Truth & Meas________________________________________________
 accel_truth_flag = false;
-accel_meas_flag  = false;
+accel_meas_flag  = true;
 gyro_truth_flag  = false;
 gyro_meas_flag   = false;
 delta_accel_flag = false;
