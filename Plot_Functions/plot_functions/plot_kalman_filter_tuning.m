@@ -99,10 +99,12 @@ if (psi_KF_flag == true)
     % Calculate Truth minus Error
     %psi_error = out.delta_psi_t__t_b.Data' - out.delta_x_t__t_b_est.Data(:,(7:9))';
     psi_t__t_b = zeros(3,length(out.A_truth.Data));
+    psi_t__t_b_est = zeros(3,length(out.A_truth.Data));
     for i=1:length(out.A_truth.Data)
         [psi_t__t_b(3,i), psi_t__t_b(2,i), psi_t__t_b(1,i)] = dcm2ypr(out.A_truth.Data(:,:,i));
+        [psi_t__t_b_est(3,i), psi_t__t_b_est(2,1), psi_t__t_b_est(1,i)] = dcm2ypr(k2dcm(out.psi_t__t_b_est.Data(i,:)'));
     end
-    psi_error = psi_t__t_b - out.psi_t__t_b_est.Data';
+    psi_error = psi_t__t_b - psi_t__t_b_est;
     
     figure
     subplot(3,1,1)
@@ -144,39 +146,30 @@ if (residuals_flag == true)
     
     
     figure
+    hold on
     subplot(3,1,1)
-    hold on
     plot(t, out.residuals.Data(:,1), 'r')
-    plot(t, out.residuals.Data(:,2), 'g')
-    plot(t, out.residuals.Data(:,3), 'b')
-    title('angular measurement residuals')
+    title('\delta_v^t_t_b_,_x measurement residuals (z - H*x)')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('error')
     grid on
-    
+    hold on
     subplot(3,1,2)
-    hold on
-    plot(t, out.residuals.Data(:,4), 'r')
-    plot(t, out.residuals.Data(:,5), 'g')
-    plot(t, out.residuals.Data(:,6), 'b')
-    title('velocity measurement residuals')
+    plot(t, out.residuals.Data(:,2), 'g')
+    title('\delta_v^t_t_b_,_y measurement residuals (z - H*x)')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('error')
     grid on
-    
     subplot(3,1,3)
-    hold on
-    plot(t, out.residuals.Data(:,7), 'r')
-    plot(t, out.residuals.Data(:,8), 'g')
-    plot(t, out.residuals.Data(:,9), 'b')
-    title('position measurement residuals')
+    plot(t, out.residuals.Data(:,3), 'b')
+    title('\delta_v^t_t_b_,_z measurement residuals (z - H*x)')
     xlabel('Time (s)')
     xlim([0 t(end)])
     ylabel('error')
     grid on
-    
+    hold off
     
 end
 

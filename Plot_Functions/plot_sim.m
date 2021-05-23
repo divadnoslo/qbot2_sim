@@ -14,37 +14,37 @@ a_truth_flag   = false;
 % Plotting PVA Measurements________________________________________________
 p_meas_flag = false;
 v_meas_flag = false;
-a_meas_flag = true;
+a_meas_flag = false;
 
 % Plotting IMU Truth & Meas________________________________________________
 accel_truth_flag = false;
-accel_meas_flag  = true;
+accel_meas_flag  = false;
 gyro_truth_flag  = false;
 gyro_meas_flag   = false;
 delta_accel_flag = false;
 delta_gyro_flag  = false;
 
 % Plotting PVA Errors from Tan Error Mech__________________________________
-delta_p_flag = false;
-delta_v_flag = false;
-delta_a_flag = false;
+delta_p_flag = true;
+delta_v_flag = true;
+delta_a_flag = true;
 
 % Plotting State Estimates for PVA Errors__________________________________
-delta_r_t__t_b_est_flag   = false;
-delta_v_t__t_b_est_flag   = false;
-delta_psi_t__t_b_est_flag = false;
+delta_r_t__t_b_est_flag   = true;
+delta_v_t__t_b_est_flag   = true;
+delta_psi_t__t_b_est_flag = true;
 
 % Plotting Kalman Filtering Tuning Check___________________________________
-r_KF_flag   = true;
-v_KF_flag   = true;
-psi_KF_flag = true;
+r_KF_flag   = false;
+v_KF_flag   = false;
+psi_KF_flag = false;
 residuals_flag = false;
-meas_flag = true;
+meas_flag = false;
 
 % Plotting Truth vs Estimates______________________________________________
-r_truth_vs_est_flag   = true;
-v_truth_vs_est_flag   = true;
-psi_truth_vs_est_flag = true;
+r_truth_vs_est_flag   = false;
+v_truth_vs_est_flag   = false;
+psi_truth_vs_est_flag = false;
 
 % Plotting Fake Aiding Sensor Outputs______________________________________
 plot_fake_r = false;

@@ -70,12 +70,17 @@ if (a_flag == true)
     [~, ~, rpy] = extract_PVA(out.P_truth.Data, out.V_truth.Data, ...
                                                         out.A_truth.Data);
     
+    % Convert k -> dcm -> ypr
+    for k = 1 : length(out.psi_t__t_b_est.Data)
+        [yaw(k), pitch(k), roll(k)] = dcm2ypr(k2dcm(out.psi_t__t_b_est.Data(k,:)'));
+    end
+                                                    
     rpy = rpy * pi/180;                                                  
                                                     
     figure
     hold on
     subplot(3, 1, 1)
-    plot(t, out.psi_t__t_b_est.Data(:,1) * 180/pi, 'r', t, rpy(1,:) * 180/pi, 'k')
+    plot(t, roll * 180/pi, 'r', t, rpy(1,:) * 180/pi, 'k')
     title('\psi^t_t_b_,_\phi   Truth vs. Estimate')
     xlabel('Time (s)')
     xlim([0 t(end)])
@@ -83,7 +88,7 @@ if (a_flag == true)
     grid on
     legend('estimate', 'truth', 'Location', 'Best')
     subplot(3, 1, 2)
-    plot(t, out.psi_t__t_b_est.Data(:,2) * 180/pi, 'g', t, rpy(2,:) * 180/pi, 'k')
+    plot(t, pitch * 180/pi, 'g', t, rpy(2,:) * 180/pi, 'k')
     title('\psi^t_t_b_,_\theta   Truth vs. Estimate')
     xlabel('Time (s)')
     xlim([0 t(end)])
@@ -91,7 +96,7 @@ if (a_flag == true)
     grid on
     legend('estimate', 'truth', 'Location', 'Best')
     subplot(3, 1, 3)
-    plot(t, unwrap(out.psi_t__t_b_est.Data(:,3) * 180/pi), 'b', t, unwrap(rpy(3,:) * 180/pi), 'k')
+    plot(t, unwrap(yaw * 180/pi), 'b', t, unwrap(rpy(3,:) * 180/pi), 'k')
     title('\psi^t_t_b_,_\psi   Truth vs. Estimate')
     xlabel('Time (s)')
     xlim([0 t(end)])

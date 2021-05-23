@@ -8,6 +8,10 @@
 %     clear P
 % end
 
+% Add Folders to Path
+addpath('IMU_Cal_Data', 'Nav_Functions', ...
+        'Plot_Functions', 'Plot_Functions/plot_functions')
+
 % Open Simulink Model
 open('qbot2_sim_2020a')
 % open('qbot2_sim')
