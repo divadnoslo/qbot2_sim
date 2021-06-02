@@ -5,11 +5,13 @@
 %% Load the Simulation M-File
 
 file_name = 'test_1';
-file_path = ['IMU Error Prop Monte Carlo/', file_name, '_monte_carlo.mat'];
+file_path = [file_name, '_monte_carlo.mat'];
 
 load(file_path)
 
 %% Subplots of X, Y, and Z position error
+
+color_str = ['r', 'g', 'c', 'b', 'm'];
 
 fig_num = 1;
 
@@ -36,6 +38,7 @@ xlabel('Time (s)')
 ylabel('\deltar_y (m)')
 grid on
 hold off
+
 fig_num = 3;
 
 figure(fig_num)

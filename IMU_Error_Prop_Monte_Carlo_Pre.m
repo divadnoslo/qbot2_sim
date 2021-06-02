@@ -5,20 +5,20 @@
 %% Name the Simulation M-File
 
 file_name = 'test_1';
-file_path = ['IMU Error Prop Monte Carlo/', file_name, '_monte_carlo.mat'];
+file_path = [file_name, '_monte_carlo.mat'];
 
 %% Set IMU Error Characteristics
 
 % Open Simulink Model
-open('qbot2_sim')
+open('qbot2_sim_2020a')
 
 % Load Qbot2 Parameters
 init_qbot2_params;
 
 %**************************************************************************
 % Accel Constant Errors
-P.accel.b_a_FB_flag = true;
-P.accel.M_a_flag = true;
+P.accel.b_a_FB_flag = false;
+P.accel.M_a_flag = false;
 
 % Accel Varying Errors
 P.accel.white_noise_accel_flag = true;
@@ -45,7 +45,6 @@ P.plotsim_flag = false;
 %% Define Monte Carlo Parameters
 
 num_runs = 5;
-color_str = ['r', 'g', 'c', 'b', 'm'];
 
 delta_x = zeros(num_runs, length(0:P.dt:P.t_end));
 delta_y = zeros(num_runs, length(0:P.dt:P.t_end));
@@ -60,22 +59,23 @@ tic
 for kk = 1 : num_runs
     
     % Run Simulation -- plot_sim() in StopFcn commented out!
-    out = sim('qbot2_sim');
+    rng(kk)
+    out = sim('qbot2_sim_2020a');
     
     % Isolate the Position Error
     if (kk == 1)
         t = out.tout;
     end
-    delta_xyz = out.delta_r_t__t_b.Data;
+    delta_xyz = out.delta_r_t__t_b.Data';
     
     % Isolate XYZ errors
-    delta_x(kk,:) = delta_xyz(:,1);
-    delta_y(kk,:) = delta_xyz(:,2);
-    delta_z(kk,:) = delta_xyz(:,3);
+    delta_x(kk,:) = delta_xyz(1,:);
+    delta_y(kk,:) = delta_xyz(2,:);
+    delta_z(kk,:) = delta_xyz(3,:);
     
     % Find the magntiude of the position error
     for jj = 1 : length(delta_xyz)
-        delta_r(kk,jj) = sqrt(delta_xyz(jj,1)^2 + delta_xyz(jj,2)^2 + delta_xyz(jj,3)^2);
+        delta_r(kk,jj) = sqrt(delta_xyz(1,jj)^2 + delta_xyz(2,jj)^2 + delta_xyz(3,jj)^2);
     end
     
     % Clear Simulation Output
