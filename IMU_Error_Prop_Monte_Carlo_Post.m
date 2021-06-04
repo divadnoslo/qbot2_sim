@@ -4,7 +4,7 @@
 
 %% Load the Simulation M-File
 
-file_name = 'test_1';
+file_name = 'rest_10min_gyro_cal';
 file_path = [file_name, '_monte_carlo.mat'];
 
 load(file_path)
@@ -81,7 +81,7 @@ title('Std-Dev in Z-Position Error')
 xlabel('Time (s)')
 ylabel('\sigma_z (m)')
 grid on
-legend('Expected Error Growth', 'Error Std Dev of 50 Sims', 'Location', 'Best')
+legend('Expected Error Growth', 'Error Std Dev of 100 Sims', 'Location', 'Best')
 hold off
 
 %% Monte Carlo Sim Plot
@@ -94,7 +94,7 @@ end
 line([t(1) t(end)], [avg_error avg_error], 'Color', 'red', 'LineStyle', '--')
 text(0.5, avg_error + 0.1 * avg_error, 'Average Ending Position Error')
 text(0.5, avg_error - 0.1 * avg_error, [num2str(avg_error), ' m'])
-title('Monte Carlo:  \delta|r^t_t_b|  -- Position Error via Accel Errors Only')
+title('Monte Carlo:  \delta|r^t_t_b|  -- Position Error via Gyro Errors Only')
 xlabel('Time (s)')
 ylabel('\delta|r^t_t_b| (m)')
 grid on

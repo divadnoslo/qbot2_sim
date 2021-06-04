@@ -4,7 +4,7 @@
 
 %% Name the Simulation M-File
 
-file_name = 'test_1';
+file_name = 'rest_10min_gyro_cal';
 file_path = [file_name, '_monte_carlo.mat'];
 
 %% Set IMU Error Characteristics
@@ -21,8 +21,8 @@ P.accel.b_a_FB_flag = false;
 P.accel.M_a_flag = false;
 
 % Accel Varying Errors
-P.accel.white_noise_accel_flag = true;
-P.accel.colored_noise_accel_flag = true;
+P.accel.white_noise_accel_flag = false;
+P.accel.colored_noise_accel_flag = false;
 
 
 % Gyro Constant Errors
@@ -31,8 +31,8 @@ P.gyro.M_g_flag = false;
 P.gyro.gyro_sens_flag = false;
 
 % Gyro Varying Errors
-P.gyro.white_noise_gyro_flag = false;
-P.gyro.colored_noise_gyro_flag = false;
+P.gyro.white_noise_gyro_flag = true;
+P.gyro.colored_noise_gyro_flag = true;
 %**************************************************************************
 
 % Set IMU Error Caracteristics
@@ -42,9 +42,12 @@ IMU_Error_Properties;
 % Set plotsim flag
 P.plotsim_flag = false;
 
+% Generat Motion Plan
+qbot2_motion_plan;
+
 %% Define Monte Carlo Parameters
 
-num_runs = 5;
+num_runs = 100;
 
 delta_x = zeros(num_runs, length(0:P.dt:P.t_end));
 delta_y = zeros(num_runs, length(0:P.dt:P.t_end));
@@ -91,9 +94,9 @@ beep
 end_error = delta_r(:,end);
 avg_error = mean(end_error);
 
-sigma_x = zeros(num_runs, length(0:P.dt:P.t_end));
-sigma_y = zeros(num_runs, length(0:P.dt:P.t_end));
-sigma_z = zeros(num_runs, length(0:P.dt:P.t_end));
+sigma_x = zeros(1, length(0:P.dt:P.t_end));
+sigma_y = zeros(1, length(0:P.dt:P.t_end));
+sigma_z = zeros(1, length(0:P.dt:P.t_end));
 for ii = 1 : length(t)
     
     % Std-Dev in X at each time step
@@ -111,4 +114,4 @@ end
 
 save(file_path, 't', 'delta_x', 'delta_y', 'delta_z', ...
               'delta_r', 'end_error', 'avg_error', 'num_runs', ...
-              'color_str', 'sigma_x', 'sigma_y', 'sigma_z')
+              'sigma_x', 'sigma_y', 'sigma_z')
